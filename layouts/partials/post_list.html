@@ -1,40 +1,38 @@
 <!-- post list -->
 {{ range $index, $element := $.Paginator.Pages }}
-<div class="post-preview">
-    <a href="{{ .Permalink }}">
-        <h2 class="post-title">
-            {{ .Title }}
-        </h2>
-	{{with .Params.subtitle }}
-        <h3 class="post-subtitle">
-            {{ . }}
-        </h3>
-	{{ end }}
-        <div class="post-content-preview">
-	{{ with .Description }}
-            {{ . }}
+<div class="post-preview post-preview-box">
+    <div class="post-preview post-preview-container" style="background-image: url({{ .Params.image }}); background-size: cover;">
+        <a href="{{ .Permalink }}">
+            <h1 class="post-title">
+                {{ .Title }}
+            </h1>
+        {{with .Params.subtitle }}
+            <h2 class="post-subtitle">
+                {{ . }}
+            </h2>
+        {{ end }}
+        </a>
+        <p class="post-meta">
+        {{ if .Params.metadata }}
+            {{ range $index, $element := .Params.metadata }}
+                {{ if .link }}
+                    <a href="{{ .link }}">{{ .text }}</a>
+                {{ else }}
+                    {{ .text }}
+                {{ end }}
+            {{ end }}
         {{ else }}
-            {{ .Summary}}
-       {{ end }}
-        </div>
-    </a>
-    <p class="post-meta">
-    {{ if .Params.metadata }}
-        {{ range $index, $element := .Params.metadata }}
-            {{ if .link }}
-                <a href="{{ .link }}">{{ .text }}</a>
-            {{ else }}
-                {{ .text }}
+            Posted by {{ with .Params.author }}{{ . }}{{ else }}{{ .Site.Title }}{{ end }}  {{ .Date.Format "Monday, January 2, 2006" }}
+            <!-- Don't show "Last Modified on" if update happened on the same day. -->
+            {{ if (and (not .Lastmod.IsZero) (not (eq (dateFormat "2006-01-02" .Lastmod) (dateFormat "2006-01-02" .Date)))) }}
+                <br>Last Modified on {{ dateFormat "Monday, January 2, 2006" .Params.LastMod }} 
             {{ end }}
         {{ end }}
-    {{ else }}
-        Posted by{{ with .Params.author }}{{ . }}{{ else }}{{ .Site.Title }}{{ end }}  {{ .Date.Format "Monday, January 2, 2006" }}
-        <!-- Don't show "Last Modified on" if update happened on the same day. -->
-        {{ if (and (not .Lastmod.IsZero) (not (eq (dateFormat "2006-01-02" .Lastmod) (dateFormat "2006-01-02" .Date)))) }}
-            <br>Last Modified on {{ dateFormat "Monday, January 2, 2006" .Params.LastMod }} 
-        {{ end }}
-    {{ end }}
-    </p>
+        </p>
+    </div>
+    <div class="post-preview">
+        {{ .Content }}
+    </div>
 
 </div>
 <hr>
