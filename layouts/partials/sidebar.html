@@ -249,4 +249,16 @@
         </ul>
     </section>
     {{ end }}
+
+    <!-- Banners -->
+    {{ if .Site.Params.banners }}
+    <section>
+        <hr>
+        <ul class="list-inline">
+            {{ range .Site.Params.banner_link }}
+            <li><a target="_blank" href="{{.href | relLangURL}}"><img src="{{.img}}" class="sidebar-banner-img"></a></li>
+            {{ end }}
+        </ul>
+    </section>
+    {{ end }}
 </div>
